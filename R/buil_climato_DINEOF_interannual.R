@@ -6,16 +6,16 @@
 # 46 wks x ~10k stations
 
 rm(list=ls()) # clear all variables
-
+setwd("C:/files/Work/Bigelow/Data/")
 #----- Import Masks from .txt file
 # 3 masks (1 = ok, 0 = remove): bathy > 300, SubArcticAtlantic, both
 # mask gets rid of data from areas shallower than 300 meters (near the coasts) also gets rid of data outside the lat lon of interest
 
-mask = read.table(file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/mask.txt")
+mask = read.table(file="~/txt_files/mask.txt")
 
 library("ncdf4")
 
-folder <- "C:/Users/Ade/Documents/Bigelow/DINEOF-2018/DINEOF/" # address of folder where the data is
+folder <- "~/DINEOF_2018_raw_data/" # address of folder where the data is
 
 nweeks <- 46
 julianday <- seq(0,365,8) # julian day is one 8 day week
@@ -82,7 +82,7 @@ for (y in 1:length(years)) {
   data$LAT <- LATv
   data$mask <- mask[,1]
   
-  save_loc <- "C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/"
+  save_loc <- "~/DINEOF_2018_processed_data/"
   new_file <- paste(save_loc, "CHLGLOB_DINEOF", as.character(c_year), ".rdata", sep="")
   save(data, file = new_file)
   
@@ -90,10 +90,10 @@ for (y in 1:length(years)) {
 
 #--------- Export lon & lat in .txt file to be opened in MATLAB, to build masks with MATLAB
 loc <- cbind(LONv, LATv)
-write.table(loc,file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/lonlat.txt", sep = "\t", row.names=F,col.names = F)
+write.table(loc,file="~/txt_files/", sep = "\t", row.names=F,col.names = F)
 
 clu_array <- c()
 clu_array$xo <- xo
 clu_array$yo <- yo
-save(clu_array, file = "C:/Users/Ade/Documents/Bigelow/DINEOF-2018/array_index.rdata")
+save(clu_array, file = "~/DINEOF_2018_processed_data/array_index.rdata")
   

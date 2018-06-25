@@ -7,9 +7,10 @@
 
 
 rm(list=ls()) # clear all variable
+setwd("C:/files/Work/Bigelow/Data/")
 library("ncdf4")
 
-folder <- "C:/Users/Ade/Documents/Bigelow/DINEOF-2018/DINEOF/" # address of folder where data is
+folder <- "~/DINEOF_2018_raw_data/" # address of folder where data is
 # creates a subset of data from global set
 # lon_lim <- c(-70,20) 
 # lat_lim <- c(59,82)
@@ -67,14 +68,14 @@ for (n in 1:nweeks) {
 
 #----- Export lon & lat in .txt file to be open in Matlab, to build masks with Matlab 
 loc <- cbind(LONv, LATv)
-write.table(loc,file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/lonlat.txt", sep = "\t", row.names=F,col.names = F)
+write.table(loc,file="~/txt_files/lonlat.txt", sep = "\t", row.names=F,col.names = F)
 
 
 #----- Import Masks from .txt file
 # 3 masks (1 = ok, 0 = remove): bathy > 300, SubArcticAtlantic, both
 # mask gets rid of data from areas shallower than 300 meters (near the coasts) also gets rid of data outside the lat lon of interest
 
-mask = read.table(file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/mask.txt")
+mask = read.table(file="~txt_files/mask.txt")
 
 
 #----- Build data and save
@@ -87,4 +88,4 @@ data$yo <- yo
 data$LON <- LONv
 data$LAT <- LATv
 data$mask <- mask[,1]
-save(data, file = "C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/CHLGLOB_DINEOF19982017.rdata")
+save(data, file = "~/DINEOF_2018_processed_data/CHLGLOB_DINEOF19982017.rdata")
