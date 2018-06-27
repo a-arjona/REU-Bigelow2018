@@ -10,7 +10,7 @@ rm(list=ls()) # clear all variable
 setwd("C:/files/Work/Bigelow/Data/")
 library("ncdf4")
 
-folder <- "~/DINEOF_2018_raw_data/" # address of folder where data is
+folder <- "./DINEOF_2018_raw_data/" # address of folder where data is
 # creates a subset of data from global set
 # lon_lim <- c(-70,20) 
 # lat_lim <- c(59,82)
@@ -53,29 +53,29 @@ for (n in 1:nweeks) {
       }
       
       # Subset at the location wanted
-      CHL <- ncvar_get(nc, varid="CHL1_intp")
+      CHL <- ncvar_get(nc, varid = "CHL1_intp")
       CHL <- CHL[,dim(CHL)[2]:1] # reverse latitudes
       chl_week <- cbind(chl_week, c(CHL)) # from matrix to vector
     
     } else {
-      chl_week <- cbind(chl_week, array(dim=c(20832,1)))
+      chl_week <- cbind(chl_week, array(dim = c(20832,1)))
     }
   }
   
-  chl_clim <- cbind(chl_clim, rowMeans(chl_week, na.rm=TRUE)) # build climatological dataset
+  chl_clim <- cbind(chl_clim, rowMeans(chl_week, na.rm = TRUE)) # build climatological dataset
 }
 
 
 #----- Export lon & lat in .txt file to be open in Matlab, to build masks with Matlab 
 loc <- cbind(LONv, LATv)
-write.table(loc,file="~/txt_files/lonlat.txt", sep = "\t", row.names=F,col.names = F)
+write.table(loc,file = "./txt_files/lonlat.txt", sep = "\t", row.names = F,col.names = F)
 
 
 #----- Import Masks from .txt file
 # 3 masks (1 = ok, 0 = remove): bathy > 300, SubArcticAtlantic, both
 # mask gets rid of data from areas shallower than 300 meters (near the coasts) also gets rid of data outside the lat lon of interest
 
-mask = read.table(file="~txt_files/mask.txt")
+mask = read.table(file = "./txt_files/mask.txt")
 
 
 #----- Build data and save
@@ -88,4 +88,4 @@ data$yo <- yo
 data$LON <- LONv
 data$LAT <- LATv
 data$mask <- mask[,1]
-save(data, file = "~/DINEOF_2018_processed_data/CHLGLOB_DINEOF19982017.rdata")
+save(data, file = "./DINEOF_2018_processed_data/CHLGLOB_DINEOF19982017.rdata")

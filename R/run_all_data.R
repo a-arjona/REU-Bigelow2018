@@ -19,12 +19,12 @@ require("fields")
 
 # ------------- Get Data from Mean Climato Once Only ---------------
 # load time series data for mean_climato and cluster #
-setwd("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/scripts/")
+setwd("C:/FIles/Work/Bigelow/Data/")
 for (nclu in 4:6) { # tests different number of clusters
   
-  source("clustering_DINEOF.R")
+  source("./Scripts/clustering_DINEOF.R")
   
-  rm(list=setdiff(ls(), c("years","cl","past_cl","nclu","JDstart","JDend","C","S","maxo","yo","xo","good_points"))) # delete object except the one useful
+  rm(list = setdiff(ls(), c("years","cl","past_cl","nclu","JDstart","JDend","C","S","maxo","yo","xo","good_points"))) # delete object except the one useful
   
   cluster     <- cl$result$cluster
   centers     <- cl$result$centers
@@ -43,14 +43,14 @@ for (nclu in 4:6) { # tests different number of clusters
     keep_clu <- cluster
   }
   if (nclu >= 3) {
-    for (k in 1:(nclu-1)) {
+    for (k in 1:(nclu - 1)) {
       index <- which(past_cl == k)
-      h     <- hist(cluster[index],0:(nclu),plot=F)
-      counts_cl <-rbind(counts_cl,h$counts)
+      h     <- hist(cluster[index],0:(nclu),plot = F)
+      counts_cl <- rbind(counts_cl,h$counts)
     }
     
     index <- max.col(counts_cl)
-    for (k in 1:(nclu-1)) {
+    for (k in 1:(nclu - 1)) {
       new_cluster[cluster == index[k]] <- k 
       new_centers[k,] <- centers[index[k],]
     }
@@ -64,35 +64,35 @@ for (nclu in 4:6) { # tests different number of clusters
   
   past_cl <- cluster
   
-  rm(list=setdiff(ls(), c("keep_clu","years","cluster","timeseries","good_points","yo","xo","lat","lon","past_cl","centers","nclu","JDstart","JDend","maxo","C","S"))) # delete object except the one useful
+  rm(list = setdiff(ls(), c("keep_clu","years","cluster","timeseries","good_points","yo","xo","lat","lon","past_cl","centers","nclu","JDstart","JDend","maxo","C","S"))) # delete object except the one useful
   
-  source("plot_clustering_DINEOF.R")
+  source("./Scripts/plot_clustering_DINEOF.R")
   
-  source("silhouette_analysis_DINEOF.R")
+  source("./Scripts/silhouette_analysis_DINEOF.R")
   
   C <- cbind(C, cluster)
   S <- cbind(S, siX[subindex])
 
-  rm(list=setdiff(ls(), c("keep_clu","years","past_cl","nclu","JDstart","JDend","C","S","maxo","yo","xo","good_points","timeseries"))) # delete object except the one useful
+  rm(list = setdiff(ls(), c("keep_clu","years","past_cl","nclu","JDstart","JDend","C","S","maxo","yo","xo","good_points","timeseries"))) # delete object except the one useful
   
 }
 
-write.table(C,file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/clusters.txt", sep = "\t", row.names=F,col.names = F,quote = FALSE)
+write.table(C,file = "./txt_files/clusters.txt", sep = "\t", row.names = F,col.names = F,quote = FALSE)
 
-S <- format(S,digits=1, scientific=F)
-write.table(S,file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/si.txt", sep = "\t", row.names=F,col.names = F,quote = FALSE)
+S <- format(S,digits = 1, scientific = F)
+write.table(S,file = "./txt_files/si.txt", sep = "\t", row.names = F,col.names = F,quote = FALSE)
 
-tbl <- cbind(format(maxo[good_points],digits=3), xo[good_points], yo[good_points], good_points)
-write.table(tbl,file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/metadata.txt", sep = "\t", row.names=F,col.names = F,quote = FALSE)
+tbl <- cbind(format(maxo[good_points],digits = 3), xo[good_points], yo[good_points], good_points)
+write.table(tbl,file = "./txt_files/metadata.txt", sep = "\t", row.names = F,col.names = F,quote = FALSE)
 
 tbl <- cbind(timeseries)
-write.table(format(tbl,digits=3),file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/timeseries.txt", sep = "\t", row.names=F,col.names = F,quote = FALSE)
+write.table(format(tbl,digits = 3),file = "./txt_files/timeseries.txt", sep = "\t", row.names = F,col.names = F,quote = FALSE)
 
 
 
 # ------------ Get Data Matrix for one year ------------------
 #
-load("~/Bigelow/DINEOF-2018/array_index.rdata")
+load("./DINEOF_208_processed_data/array_index.rdata")
 
 S <- array(NA, dim = c(20832, 20))
 xo_s <- clu_array$xo
@@ -104,14 +104,13 @@ yo_c <- clu_array$yo
 
 cluster <- keep_clu 
 # Gives the time series 
-setwd("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/")
 
-for (yr in 1:length(years)){
+for (yr in 1:length(years)) {
   c_year <- years[yr]
-  cyear_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/CHLGLOB_DINEOF",as.character(c_year), ".rdata",sep = "")
+  cyear_file <- paste("C:/Files/Work/Bigelow/Data/DINEOF_2018_processed_data/CHLGLOB_DINEOF",as.character(c_year), ".rdata",sep = "")
   
   # Plot sihouette value, time series for each cluster, map with clusters
-  source("interpolation_DINEOF.R")
+  source("./Scripts/interpolation_DINEOF.R")
   
   C[good_points,yr] <- new_cl
   S[good_points,yr] <- si
@@ -122,26 +121,23 @@ for (yr in 1:length(years)){
   
   #source("plot_ts_clustering.R")
   
-  rm(list=setdiff(ls(), c("cluster", "xo_s","yo_s","xo_c","yo_c","new_cl", "timeseries_annual","c_year","maxo","timeseries","past_cl","nclu","JDstart","JDend","C","S","years","xo","yo","good_points","si")))
+  rm(list = setdiff(ls(), c("cluster", "xo_s","yo_s","xo_c","yo_c","new_cl", "timeseries_annual","c_year","maxo","timeseries","past_cl","nclu","JDstart","JDend","C","S","years","xo","yo","good_points","si")))
   
-  cluster_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/", as.character(c_year), "clusters.txt", sep = "")
-  write.table(new_cl,file=cluster_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+  cluster_file <- paste("./txt_files/", as.character(c_year), "clusters.txt", sep = "")
+  write.table(new_cl,file = cluster_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
   
-  si_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/", as.character(c_year), "si.txt", sep = "")
-  si <- format(si,digits=1, scientific=F)
-  write.table(si,file=si_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+  si_file <- paste("./txt_files/", as.character(c_year), "si.txt", sep = "")
+  si <- format(si,digits = 1, scientific = F)
+  write.table(si,file = si_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
   
-  metadata_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/", as.character(c_year), "metadata.txt", sep = "")
-  tbl <- cbind(format(maxo[good_points],digits=3), xo[good_points], yo[good_points], good_points)
-  write.table(tbl,file=metadata_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+  metadata_file <- paste("./txt_files/", as.character(c_year), "metadata.txt", sep = "")
+  tbl <- cbind(format(maxo[good_points],digits = 3), xo[good_points], yo[good_points], good_points)
+  write.table(tbl,file = metadata_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
   
-  ats_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/", as.character(c_year), "timeseries.txt", sep = "")
+  ats_file <- paste("./txt_files/", as.character(c_year), "timeseries.txt", sep = "")
   tbl <- cbind(timeseries_annual)
-  write.table(format(tbl,digits=3),file=ats_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+  write.table(format(tbl,digits = 3),file = ats_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
   
   }
 
-source("mode_cluster.R")
-
-
-
+source("./Scripts/mode_cluster.R")

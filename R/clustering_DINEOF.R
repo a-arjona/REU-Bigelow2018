@@ -14,7 +14,7 @@
 #   $ xo  : int [1:138240] 1 2 3 4 5 6 7 8 9 10 ...
 #   $ yo  : int [1:138240] 1 1 1 1 1 1 1 1 1 1 ...
 library("ppclust")
-load(file="C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/CHLGLOB_DINEOF19982017.rdata") # load data from build climato
+load(file="C:/Files/Work/Bigelow/Data/DINEOF_2018_processed_data/CHLGLOB_DINEOF19982017.rdata") # load data from build climato
 
 lat <- data$lat[1,] # Latitude 
 lon <- data$lon[,1] # Longitude 
@@ -43,10 +43,10 @@ for (i in 1:nrow(adresults)) {
   cpt <- cpt + 1
   r <- adresults[i,] # Time series
   d <- which(is.finite(r) == T) # Locations NA
-  diff_d <- d[2:length(d)] - d[1:length(d)-1] # number of weeks btw NA
+  diff_d <- d[2:length(d)] - d[1:length(d) - 1] # number of weeks btw NA
   
   if (length(d) >= round(nweeks/2) & length(which(diff_d >= 5)) == 0) { # at least a half weeks of data with a data point every 4 weeks 
-    row_value <-approx(1:nweeks,r,xout=1:nweeks,rule=2)$y # linearly interpolate
+    row_value <- approx(1:nweeks,r,xout = 1:nweeks,rule = 2)$y # linearly interpolate
     maxo_row[cpt] <- max(row_value) # save max value
     adresults_norm[cpt,] <- row_value/maxo_row[cpt] # Normalization (divide by max)
   }
@@ -67,7 +67,7 @@ yo[bad_points] <- NA
 # the number of clusters that should be used will be analyzed later 
 
 # nclu <- 7 # Number of clusters
-cl<-kmeansCBI(adresults[good_points,],k=nclu,scaling=F,runs=50) # clustering Kmeans, runs: Number of starts of the k-means. scaling: If scaling is TRUE then scaling is done by dividing the variables by their root-mean-square
+cl <- kmeansCBI(adresults[good_points,],k = nclu,scaling = F,runs = 50) # clustering Kmeans, runs: Number of starts of the k-means. scaling: If scaling is TRUE then scaling is done by dividing the variables by their root-mean-square
 
 # save results
 cl$good_points <- good_points

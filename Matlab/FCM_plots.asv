@@ -188,6 +188,6 @@ for year = 1:20
     m_gshhs_l('patch',[0.8 0.8 0.8],'edgecolor','k');
     gt = strcat(c_year, ' FCM');
     title(gt)
-    pic_name = strcat('C:/Files/Work/Bigelow/Data/figures/Annual/',c_year,'FCMmap.png');
+    pic_name = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/m_figure/',c_year,'FCMmap.png');
     saveas(gcf,pic_name)
 end

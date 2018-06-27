@@ -10,7 +10,7 @@ cpt = 0;
 for year = 1:20
     
     c_year = num2str(years(year));
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'metadata.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata
     T = readtable(filename);
     
@@ -20,13 +20,13 @@ for year = 1:20
     good_points = table2array(T(:,4));
     
     % open clusters
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'clusters.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'clusters.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     
     cluster     = table2array(T);
 
     % open timeseries
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'timeseries.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'timeseries.txt');
     T = readtable(filename);
     
     timeseries  = table2array(T);
@@ -79,7 +79,7 @@ lon = -43.875 : .25 : 17.875;
 years = [1998:2017];
 
 % open mean si data
-    T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/txt_files/mean_si.txt');
+    T = readtable('C:/Files/Work/Bigelow/Data/txt_files/mean_si.txt');
     
     m_si     = table2array(T(:,1));
     xo          = table2array(T(:,2));
@@ -118,7 +118,7 @@ lon = -43.875 : .25 : 17.875;
 years = [1998:2017];
 
 % open mean si data
-    T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/txt_files/perc_assoc.txt');
+    T = readtable('C:/Files/Work/Bigelow/Data/txt_files/perc_assoc.txt');
     
     perc_assoc     = table2array(T(:,1));
     xo          = table2array(T(:,2));

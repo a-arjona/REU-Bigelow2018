@@ -14,7 +14,7 @@ for year = 1:20
     subplot(4,5,year)
     
     c_year = num2str(years(year));
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'metadata.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata
     T = readtable(filename);
     
@@ -24,7 +24,7 @@ for year = 1:20
     good_points = table2array(T(:,4));
     
     % open clusters
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'clusters.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'clusters.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     
     cluster     = table2array(T);
@@ -62,7 +62,7 @@ end
 for year = 1:20
     
     c_year = num2str(years(year));
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'metadata.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata
     T = readtable(filename);
     
@@ -72,13 +72,13 @@ for year = 1:20
     good_points = table2array(T(:,4));
     
     % open clusters
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'clusters.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'clusters.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     
     cluster     = table2array(T);
     
     % open timeseries
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'timeseries.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'timeseries.txt');
     T = readtable(filename);
     
     timeseries  = table2array(T);
@@ -107,7 +107,7 @@ for year = 1:20
         ylabel('[Chl-a] (mg m^-^3)','fontsize',9)
         title(c_year)
     end
-   pic_name = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/m_figure/',c_year,'ts.png');
+   pic_name = strcat('C:/Files/Work/Bigelow/Data/figures/Annual/',c_year,'ts.png');
    saveas(gcf,pic_name)
 end
 %%  Silhouette Analysis
@@ -120,7 +120,7 @@ for year = 1:20
     
     years = [1998:2017];
     c_year = num2str(years(year));
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'metadata.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata
     T = readtable(filename);
     
@@ -130,13 +130,13 @@ for year = 1:20
     good_points = table2array(T(:,4));
     
     % open clusters
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'clusters.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'clusters.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     
     cluster     = table2array(T);
     
     % open si
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'si.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'si.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     si  = table2array(T);
     
@@ -181,7 +181,7 @@ for year = 1:20
     figure(year+30)
     
     c_year = num2str(years(year));
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'metadata.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata
     T = readtable(filename);
     
@@ -191,7 +191,7 @@ for year = 1:20
     good_points = table2array(T(:,4));
     
     % open clusters
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'clusters.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'clusters.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     
     cluster     = table2array(T);
@@ -218,7 +218,7 @@ for year = 1:20
     m_gshhs_l('patch',[0.8 0.8 0.8],'edgecolor','k');
     title(c_year)
    
-    pic_name = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/m_figure/',c_year,'map.png');
+    pic_name = strcat('C:/Files/Work/Bigelow/Data/figures/Annual/',c_year,'map.png');
     saveas(gcf,pic_name)
 end
 
@@ -233,7 +233,7 @@ for year = 1:20
     
     years = [1998:2017];
     c_year = num2str(years(year));
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'metadata.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata
     T = readtable(filename);
     
@@ -243,13 +243,13 @@ for year = 1:20
     good_points = table2array(T(:,4));
     
     % open clusters
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'clusters.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'clusters.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     
     cluster     = table2array(T);
     
     % open si
-    filename = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/txt_files/', c_year, 'si.txt');
+    filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'si.txt');
     T = readtable(filename, 'Delimiter','space', 'ReadVariableNames',false);
     si  = table2array(T);
     
@@ -281,7 +281,7 @@ for year = 1:20
     plot([0 length(cluster)],[mean(si(:,1)) mean(si(:,1))],'k-')
     ylabel('Silhouette value', 'fontsize',9)
     title(c_year)
-    pic_name = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/m_figure/',c_year,'silho.png');
+    pic_name = strcat('C:/Files/Work/Bigelow/Data/figures/Annual/',c_year,'silho.png');
     saveas(gcf,pic_name)
 end
     
@@ -294,7 +294,7 @@ lon = -43.875 : .25 : 17.875;
 years = [1998:2017];
 
 % open clusters
-    T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/txt_files/m_clusters.txt');
+    T = readtable('C:/Files/Work/Bigelow/Data/txt_files/m_clusters.txt');
     
     cluster     = table2array(T(:,1));
     xo          = table2array(T(:,2));
@@ -323,5 +323,5 @@ figure(1)
     m_gshhs_l('patch',[0.8 0.8 0.8],'edgecolor','k');
     
    
-    pic_name = strcat('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Interannual-Data/m_figure/MODEmap.png');
+    pic_name = strcat('C:/Files/Work/Bigelow/Data/figures/Summary/MODEmap.png');
     saveas(gcf,pic_name)

@@ -11,11 +11,11 @@ setwd("C:/files/Work/Bigelow/Data/")
 # 3 masks (1 = ok, 0 = remove): bathy > 300, SubArcticAtlantic, both
 # mask gets rid of data from areas shallower than 300 meters (near the coasts) also gets rid of data outside the lat lon of interest
 
-mask = read.table(file="~/txt_files/mask.txt")
+mask = read.table(file="./txt_files/mask.txt")
 
 library("ncdf4")
 
-folder <- "~/DINEOF_2018_raw_data/" # address of folder where the data is
+folder <- "./DINEOF_2018_raw_data/" # address of folder where the data is
 
 nweeks <- 46
 julianday <- seq(0,365,8) # julian day is one 8 day week
@@ -28,7 +28,7 @@ for (y in 1:length(years)) {
   c_year <- years[y]
   
   # gives filename for all files (not all files exist or have data) from given year (46)
-  weeks <- format(as.Date(paste(as.character(c_year), "-01-01",sep="")) + julianday, "*%Y%m%d")
+  weeks <- format(as.Date(paste(as.character(c_year), "-01-01",sep = "")) + julianday, "*%Y%m%d")
   
   # open files and have a yearly climatology
   chl_year <- c()
@@ -82,18 +82,18 @@ for (y in 1:length(years)) {
   data$LAT <- LATv
   data$mask <- mask[,1]
   
-  save_loc <- "~/DINEOF_2018_processed_data/"
-  new_file <- paste(save_loc, "CHLGLOB_DINEOF", as.character(c_year), ".rdata", sep="")
+  save_loc <- "./DINEOF_2018_processed_data/"
+  new_file <- paste(save_loc, "CHLGLOB_DINEOF", as.character(c_year), ".rdata", sep = "")
   save(data, file = new_file)
   
 }
 
 #--------- Export lon & lat in .txt file to be opened in MATLAB, to build masks with MATLAB
 loc <- cbind(LONv, LATv)
-write.table(loc,file="~/txt_files/", sep = "\t", row.names=F,col.names = F)
+write.table(loc,file = "./txt_files/", sep = "\t", row.names = F,col.names = F)
 
 clu_array <- c()
 clu_array$xo <- xo
 clu_array$yo <- yo
-save(clu_array, file = "~/DINEOF_2018_processed_data/array_index.rdata")
+save(clu_array, file = "./DINEOF_2018_processed_data/array_index.rdata")
   

@@ -21,9 +21,9 @@ yo_p[bad_points] <- NA
 xo_p <- na.omit(xo_p)
 yo_p <- na.omit(yo_p)
 
-perc_assoc_file <- c("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/perc_assoc.txt")
+perc_assoc_file <- c("./txt_files/perc_assoc.txt")
 tbl <- cbind(perc_assoc, xo_p, yo_p)
-write.table(tbl,file=perc_assoc_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+write.table(tbl,file = perc_assoc_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
 
 bad_points <- which(is.na(mclusters) == T) # pixels with NA
 xo_c[bad_points] <- NA
@@ -33,14 +33,14 @@ xo_c <- na.omit(xo_c)
 yo_c <- na.omit(yo_c)
 mclusters <- na.omit(mclusters)
 
-mclu_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/m_clusters.txt", sep = "")
+mclu_file <- paste("./txt_files/m_clusters.txt", sep = "")
 tbl <- cbind(mclusters, xo_c, yo_c)
-write.table(tbl,file=mclu_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+write.table(tbl,file = mclu_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
 
 # ---------- Average si ------------
 mean_si <- array(NA, dim = c(dim(S)[1],1))
 
-for (r in 1:dim(S)[1]){
+for (r in 1:dim(S)[1]) {
   row <- S[r,]
   if (length(which(is.finite(row) == T)) >= dim(S)[2]/2) {
     mean_si[r] <- mean(row)
@@ -56,6 +56,6 @@ mean_si <- na.omit(mean_si)
 xo_s <- na.omit(xo_s)
 yo_s <- na.omit(yo_s)
 
-meansi_file <- paste("C:/Users/Ade/Documents/Bigelow/DINEOF-2018/mean_si.txt", sep = "")
+meansi_file <- paste("./txt_files/mean_si.txt", sep = "")
 tbl <- cbind(mean_si, xo_s, yo_s)
-write.table(tbl,file=meansi_file, sep = "\t", row.names=F,col.names = F,quote = FALSE)
+write.table(tbl,file = meansi_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)

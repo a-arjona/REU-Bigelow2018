@@ -8,21 +8,21 @@ close all
 clc
 
 % open metadata
-T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/metadata.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/metadata.txt');
 
 maxo        = table2array(T(:,1));
 xo          = table2array(T(:,2));
 yo          = table2array(T(:,3));
 good_points = table2array(T(:,4));
 
-T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/clusters.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/clusters.txt');
 cluster     = table2array(T);
-T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/si.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/si.txt');
 si          = table2array(T);
 
 
 % open timeseries
-T = readtable('C:/Users/Ade/Documents/Bigelow/DINEOF-2018/Mean-Data/txt_files/timeseries.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/timeseries.txt');
 
 timeseries  = table2array(T);
 
@@ -36,7 +36,7 @@ lon = -43.875 : .25 : 17.875;
 
 map_ccc = nan(size(LON));
 for ii = 1:length(xo)
-    map_ccc(yo(ii),xo(ii)) = cluster(ii,nclu);
+    map_ccc(yo(ii),xo(ii)) = cluster(ii,3);
 %     map_ccc(yo(ii),xo(ii)) = cluster3(ii);
 end
 
@@ -44,7 +44,7 @@ figure(2)
 set(0,'DefaultFigureRenderer','zbuffer') % une ligne de code necessaire car sinon parfois ca bug au moment de faire la figure (#JeSaisPasPourquoi)
 m_proj('mercator','latitude',[lat(1) lat(end)],'longitude',[lon(1) lon(end)]); % Projection a appliquer et bien specififier les latitudes limites
 
-col = cbrewer('qual','Set1',max(cluster(:,nclu)));
+col = cbrewer('qual','Set1',max(cluster(:,3)));
 ncol = [col(1,:); col(2,:); col(4,:); col(3,:); col(5,:); col(6,:)];
 colormap(ncol)
 [X,Y] = m_ll2xy(LON,LAT);
@@ -70,7 +70,7 @@ xtick = datenum(Y,M,D);
 cpt = 0;
 sub = [1 2 3 4 5 6];
 for ccc = [1 2 4 3 5 6]
-    f = find(cluster(:,nclu) == ccc);
+    f = find(cluster(:,3) == ccc);
     cpt = cpt + 1;
     subplot(2,3,sub(cpt))
     plot(datem(9:35), mean(timeseries(f,:))*mean(maxo(f)),'-','color',ncol(ccc,:),'LineWidth',2)
@@ -84,7 +84,7 @@ for ccc = [1 2 4 3 5 6]
     
 end
 
-%% Mapping all number of clusters
+%% Mapping all number of clusters (DONT RUN)
 close all
 
 lat = 60.125  : .25 : 80.875;
@@ -92,10 +92,10 @@ lon = -43.875 : .25 : 17.875;
 [LON, LAT] = meshgrid(lon,lat);
 
 
-for nclu = 2:9
+for nclu = 4:6
     nclu = nclu - 1;
     
-    subplot(2,5,nclu)
+    subplot(1,3,nclu)
     
     map_ccc = nan(size(LON));
     for ii = 1:length(xo)
@@ -121,7 +121,7 @@ for nclu = 2:9
     
 end
 
-%% All timeseries with all number of cluster
+%% All timeseries with all number of cluster (DONT RUN)
 close all
 
 M = [3:10];
@@ -168,29 +168,28 @@ legend([H(1),H(22),H(36)],{'grp = 2','grp = 6','grp = 9'},'Location','NorthEast'
 %col = cbrewer('qual','Set1',9);
 cpt = 0;
 sub = [1 3 5 7 2 4 6 8];
-    
-for nclu = 1:8
+    figure()
+for nclu = 6
     x = 0;
     cpt = cpt + 1;
-    for ccc = 1:max(cluster(:,nclu))
-        subplot(4,2,sub(cpt))
-        
-        f = find(cluster(:,nclu) == ccc);
-        Y = sort(si(f,nclu),'descend');
+    for ccc = 1:max(cluster(:,3))
+        hold on
+        f = find(cluster(:,3) == ccc);
+        Y = sort(si(f,3),'descend');
         X = [x:(x+length(Y)-1)];
         area(X,Y,'FaceColor',ncol(ccc,:),'LineStyle','none')
         hold on
         x = X(end)+1;
         set(gca,'Ylim',[-0.2 0.55],'Xlim',[-100 length(cluster)+100], 'fontsize',9)
-        text(prctile(X,25),prctile(si(:,nclu),25),[num2str(round(sum(Y < mean(si(:,nclu))).*100./length(Y))),'%'], 'fontsize',9)
-        text(prctile(X,25),prctile(si(:,nclu),75),[num2str(round(sum(Y >= mean(si(:,nclu))).*100./length(Y))),'%'], 'fontsize',9)
+        text(prctile(X,25),prctile(si(:,3),25),[num2str(round(sum(Y < mean(si(:,3))).*100./length(Y))),'%'], 'fontsize',9)
+        text(prctile(X,25),prctile(si(:,3),75),[num2str(round(sum(Y >= mean(si(:,3))).*100./length(Y))),'%'], 'fontsize',9)
     
     end
-    plot([0 length(cluster)],[mean(si(:,nclu)) mean(si(:,nclu))],'k-')
+    plot([0 length(cluster)],[mean(si(:,3)) mean(si(:,3))],'k-')
     ylabel('Silhouette value', 'fontsize',9)
 end
 
-legend([H(1),H(22),H(36)],{'grp = 2','grp = 6','grp = 9'},'Location','southeast')
+%legend([H(1),H(22),H(36)],{'grp = 2','grp = 6','grp = 9'},'Location','southeast')
 %% save
 
 set(gcf,'PaperPosition',[0 0 10 8])
