@@ -120,7 +120,7 @@ for (yr in 1:length(years)) {
   #rm(list=setdiff(ls(), c("xo_s","yo_s","xo_c","yo_c","c_year","cluster","maxo","years","timeseries","new_cl","nclu","JDstart","JDend","C","S", "timeseries_annual", "si", "dist_timeseries", "c","col","good_points","adresults","lon","lat","xo","yo")))
   
   #source("plot_ts_clustering.R")
-  
+  # -------- Save Annual Text Files -------------
   rm(list = setdiff(ls(), c("cluster", "xo_s","yo_s","xo_c","yo_c","new_cl", "timeseries_annual","c_year","maxo","timeseries","past_cl","nclu","JDstart","JDend","C","S","years","xo","yo","good_points","si")))
   
   cluster_file <- paste("./txt_files/", as.character(c_year), "clusters.txt", sep = "")
