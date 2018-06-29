@@ -1,8 +1,6 @@
-rm(list = ls())
-
 setwd("C:/Files/Work/Bigelow/Data/")
 source("./Scripts/R/functions.R")
 
-mean20Climato <- buildData(1998, 2017)
-mean9807 <- buildData(1998, 2007)
-mean0817 <- builData(2008, 2017)
+# ------- 1998 - 2007 ------
+#run kmeans analysis a chosen number of times and save metadata, timeseries, si, cluster as .txt files 
+z <- runK(1998,2007,filename = "nclu9808")

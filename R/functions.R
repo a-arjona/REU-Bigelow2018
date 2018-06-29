@@ -1,8 +1,6 @@
 # build data matrices from raw satellite data
 # returns data matrix (pixels by weeks)
 buildData <- function(start, end = start, nweeks = 46, pixels = 20832) { 
-  # type true is mean 
-  # type false is annual
   
   library("ncdf4")
   folder <- "C:/files/Work/Bigelow/Data/DINEOF_2018_raw_data/"
@@ -102,13 +100,15 @@ intNorm <- function(data, wkstart = 9, wkend = 35, pixels = 20832) {
       data_norm[cpt,] <- row_value/maxo_row[cpt] # Normalization (divide by max)
     }
   }
+  gp <- which(is.na(data_norm[,1]) == F)
+  bp <- which(is.na(data_norm[,1]) == T)
   
   pData <- c()
   pData$timeseries <- data_norm # save data for clustering
-  pData$good_points <- which(is.na(pData$data[,1]) == F) # pixels without NA to be cluterized
-  pData$bad_points <- which(is.na(pData$data[,1]) == T) # pixels with NA
-  xo[pData$bad_points] <- NA
-  yo[pData$bad_points] <- NA
+  pData$good_points <- gp # pixels without NA to be cluterized
+  pData$bad_points <- bp # pixels with NA
+  xo[bp] <- NA
+  yo[bp] <- NA
   pData$xo <- xo
   pData$yo <- yo
   pData$lat <- lat
@@ -117,9 +117,38 @@ intNorm <- function(data, wkstart = 9, wkend = 35, pixels = 20832) {
   
   return(pData)
 }
+
+cleanData <- function(start, end = start) {
+  x <- buildData(start, end)
+  x <- intNorm(x)
+  return(x)
+}
   
+kcluster <- function(data, nclu, scale = F, run = 50) {
+  library("ppclust")
+  library("fpc")
+  
+  ts <- data$timeseries
+  gp <- data$good_points
+  goodData <- ts[gp,]
+  
+  ccl <- kmeansCBI(goodData, k = nclu, scaling = scale, runs = run)
+  
+  cl <- c()
+  cl$timeseries <- goodData
+  cl$cluster <- ccl$result$cluster
+  cl$centers <- ccl$result$centers
+  cl$good_points <- gp
+  cl$lon <- data$lon
+  cl$lat <- data$lat
+  cl$xo <- data$xo
+  cl$yo <- data$yo
+  cl$maxo <- data$maxo
+  
+  return(cl)
+}
 # Clusters data, returns object with kmeans and fcm
-cluster <- function(data, center) {
+fuzzy <- function(data, center) {
   library("e1071")
   ts <- data$timeseries
   gp <- data$good_points
@@ -163,7 +192,7 @@ si <- function(data, data2 = NULL) {
   
   newData <- c()
   newData$timeseries <- ts1
-  newData$cluster <- new_cl
+  newData$cluster_annual <- new_cl
   newData$si <- si
   newData$good_points <- data$good_points
   newData$xo <- data$xo
@@ -267,13 +296,105 @@ modePerc <- function(..., pixels = 20832) {
   return(pa, mclu)
 }
 
-# Mean Data
-processMean <- function(start, end, nclu) {
+# Mean Data. Builds and interpolates, kmeans, fcm and saves to text files
+processMean <- function(start, end, nclu, years) {
   climato <- buildData(start,end) # build data matrix from raw data
   climato <- intNorm(climato) # clean data
   
   clData <- cluster(climato, nclu) # cluster the mean data
-  sidata <- si(clData) # get silhouette indexes
+  siData <- si(clData) # get silhouette indexes
   
+  cluster_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(years), "clusters.txt", sep = "")
+  write.table(clData$cluster,file = cluster_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
   
+  si_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(years), "si.txt", sep = "")
+  si <- format(siData$si,digits = 1, scientific = F)
+  write.table(si,file = si_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  metadata_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(years), "metadata.txt", sep = "")
+  tbl <- cbind(format(clData$maxo[clData$good_points],digits = 3), clData$xo[clData$good_points], clData$yo[clData$good_points], clData$good_points)
+  write.table(tbl,file = metadata_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  ats_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(years), "timeseries.txt", sep = "")
+  tbl <- cbind(clData$timeseries)
+  write.table(format(tbl,digits = 3),file = ats_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  mem_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(years), "fuzzy_cl.txt", sep = "")
+  membership_cl <- format(clData$membership,digits = 3, scientific = F)
+  tbl <- cbind(membership_cl, clData$xo[clData$good_points], clData$yo[clData$good_points])
+  write.table(tbl,file = mem_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  return(clData)
+}
+
+runK <- function(startDate, endDate = startDate, ncluStart = 2, ncluEnd = 8, filename) {
+  C <- c()
+  S <- c()
+  maxo <- c()
+  xo <- c()
+  yo <- c()
+  x <- cleanData(startDate,endDate)
+  kmeansData <- c()
+  past_cl <- NA
+  print(filename)
+  for (nclu in ncluStart:ncluEnd) {
+    
+    y <- kcluster(x, nclu)
+   
+    new_cluster <- array(NA, dim = length(y$cluster))
+    new_centers <- array(NA, dim = dim(y$centers))
+    counts_cl <- c()
+    
+    if (nclu >= 3) {
+      for (k in 1:(nclu - 1)) {
+        index <- which(past_cl == k)
+        h     <- hist(y$cluster[index],0:(nclu),plot = F)
+        counts_cl <- rbind(counts_cl,h$counts)
+      }
+      
+      index <- max.col(counts_cl)
+      for (k in 1:(nclu - 1)) {
+        new_cluster[y$cluster == index[k]] <- k 
+        new_centers[k,] <- y$centers[index[k],]
+      }
+      
+      new_centers[nclu,] <- y$centers[y$cluster[is.na(new_cluster)][1],]
+      new_cluster[is.na(new_cluster)] <- nclu
+      
+      cluster <- new_cluster
+      centers <- new_centers
+    }
+    
+    past_cl <- y$cluster
+    maxo <- y$maxo
+    xo <- y$xo
+    yo <- y$yo
+    
+    siX <- si(y)
+    siX <- siX$si
+    
+    C <- cbind(C, past_cl)
+    S <- cbind(S, siX)
+    
+    y$si <- siX
+    
+    kmeansData <- c(kmeansData, y)
+  }
+  
+  cluster_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(filename), "clusters.txt", sep = "")
+  write.table(C,file = cluster_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  si_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(filename), "si.txt", sep = "")
+  S <- format(S,digits = 1, scientific = F)
+  write.table(S,file = si_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  metadata_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(filename), "metadata.txt", sep = "")
+  tbl <- cbind(format(maxo[y$good_points,1],digits = 3), xo[y$good_points,1], yo[y$good_points,1], y$good_points)
+  write.table(tbl,file = metadata_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  ats_file <- paste("C:/Files/Work/Bigelow/Data/txt_files/", as.character(filename), "timeseries.txt", sep = "")
+  tbl <- cbind(x$timeseries[x$good_points])
+  write.table(format(tbl,digits = 3),file = ats_file, sep = "\t", row.names = F,col.names = F,quote = FALSE)
+  
+  return(kmeansData)
 }

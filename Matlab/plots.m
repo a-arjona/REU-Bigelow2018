@@ -8,21 +8,21 @@ close all
 clc
 
 % open metadata
-T = readtable('C:/Files/Work/Bigelow/Data/txt_files/metadata.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/19982007metadata.txt');
 
 maxo        = table2array(T(:,1));
 xo          = table2array(T(:,2));
 yo          = table2array(T(:,3));
 good_points = table2array(T(:,4));
 
-T = readtable('C:/Files/Work/Bigelow/Data/txt_files/clusters.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/19982007clusters.txt','Delimiter','space', 'ReadVariableNames',false);
 cluster     = table2array(T);
-T = readtable('C:/Files/Work/Bigelow/Data/txt_files/si.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/19982007si.txt','Delimiter','space', 'ReadVariableNames',false);
 si          = table2array(T);
 
 
 % open timeseries
-T = readtable('C:/Files/Work/Bigelow/Data/txt_files/timeseries.txt');
+T = readtable('C:/Files/Work/Bigelow/Data/txt_files/19982007timeseries.txt');
 
 timeseries  = table2array(T);
 

@@ -105,7 +105,7 @@ for year = 1:20
         set(gca,'Ylim',[0 3],'Xtick',xtick,'Xticklabel',datestr(xtick,'mmm'),'Xlim',[xtick(1) xtick(end)+10],...
             'Xgrid','on','Ygrid','on','fontsize',9)
         ylabel('[Chl-a] (mg m^-^3)','fontsize',9)
-        title(c_year)
+        %title(c_year)
     end
    pic_name = strcat('C:/Files/Work/Bigelow/Data/figures/Annual/',c_year,'ts.png');
    saveas(gcf,pic_name)
@@ -179,7 +179,7 @@ years = [1998:2017];
 for year = 1:20
     
     figure(year+30)
-    
+    figure()
     c_year = num2str(years(year));
     filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
     % open metadata

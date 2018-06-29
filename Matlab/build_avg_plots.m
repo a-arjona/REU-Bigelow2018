@@ -7,7 +7,7 @@ mean_ts_clu = zeros(120, 28);
 years = [1998:2017];
 cpt = 0;
 
-for year = 1:20
+for year = 1:10
     
     c_year = num2str(years(year));
     filename = strcat('C:/Files/Work/Bigelow/Data/txt_files/', c_year, 'metadata.txt');
@@ -67,7 +67,7 @@ for clu = 1:6
     set(gca,'Ylim',[0 5],'Xtick',xtick,'Xticklabel',datestr(xtick,'mmm'),'Xlim',[xtick(1) xtick(end)+10],...
         'Xgrid','on','Ygrid','on','fontsize',9)
     ylabel('[Chl-a] (mg m^-^3)','fontsize',9)
-    title("Average Timeseries by Cluster over 20 years")
+    title("Average Timeseries by Cluster 1998-2007")
 end 
 
 %% Average Si
